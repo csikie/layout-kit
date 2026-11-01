@@ -1,0 +1,33 @@
+# dependencies
+node_modules
+
+# next.js
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+
+# generated shadcn registry (vp run registry:build)
+public/r
+
+# wrangler local state
+.wrangler
+
+# logs
+*.log
+
+# env files
+.env
+.env.*
+!.env.example
+
+# editors and OS
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.local
+
+# AI agent worktrees
+.claude/worktrees/

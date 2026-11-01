@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .accent{fill:#9ae600;fill:oklch(0.841 0.238 128.85)}
+    .structure{fill:#0c0c09;fill:oklch(0.153 0.006 107.1)}
+    @media (prefers-color-scheme:dark){.accent{fill:#7ccf00;fill:oklch(0.768 0.233 130.85)}.structure{fill:#fff}}
+  </style>
+  <path class="accent" fill="#9ae600" d="M2 2h16v12h-8v16H2Z"/>
+  <path class="structure" fill="#0c0c09" d="M22 2h8v28H14V18h8Z"/>
+</svg>
