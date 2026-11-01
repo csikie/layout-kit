@@ -1,6 +1,6 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -160,49 +160,87 @@ function PageActions({ className, render, ...props }: PageActionsProps) {
 
 type PageAsideWidth = "sm" | "md" | "lg";
 type PageAsidePosition = "start" | "end";
+type PageAsideBreakpoint = "md" | "lg" | "xl" | "2xl";
+type PageAsideCollapse = "stack" | "hide";
+
+// Each preset sets --page-aside-width; the grid template reads it, so a custom
+// width is one style or class away: style={{ "--page-aside-width": "13rem" }}.
+const asideWidthVariants = {
+  sm: "[--page-aside-width:16rem]",
+  md: "[--page-aside-width:20rem]",
+  lg: "[--page-aside-width:24rem]",
+} as const satisfies Record<PageAsideWidth, string>;
 
 // The aside column is mirrored for "start", so the content always gets the
-// flexible track. Both children are placed explicitly on row 1 at lg, which
-// keeps the DOM (and reading) order content-first regardless of position.
+// flexible track. Both children are placed explicitly on row 1 from the
+// breakpoint up, which keeps the DOM (and reading) order content-first
+// regardless of position.
 const asideTemplateVariants = {
-  end: {
-    sm: "lg:grid-cols-[minmax(0,1fr)_16rem]",
-    md: "lg:grid-cols-[minmax(0,1fr)_20rem]",
-    lg: "lg:grid-cols-[minmax(0,1fr)_24rem]",
+  md: {
+    end: "md:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]",
+    start: "md:grid-cols-[var(--page-aside-width)_minmax(0,1fr)]",
   },
-  start: {
-    sm: "lg:grid-cols-[16rem_minmax(0,1fr)]",
-    md: "lg:grid-cols-[20rem_minmax(0,1fr)]",
-    lg: "lg:grid-cols-[24rem_minmax(0,1fr)]",
+  lg: {
+    end: "lg:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]",
+    start: "lg:grid-cols-[var(--page-aside-width)_minmax(0,1fr)]",
   },
-} as const satisfies Record<PageAsidePosition, Record<PageAsideWidth, string>>;
+  xl: {
+    end: "xl:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]",
+    start: "xl:grid-cols-[var(--page-aside-width)_minmax(0,1fr)]",
+  },
+  "2xl": {
+    end: "2xl:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]",
+    start: "2xl:grid-cols-[var(--page-aside-width)_minmax(0,1fr)]",
+  },
+} as const satisfies Record<PageAsideBreakpoint, Record<PageAsidePosition, string>>;
 
 const contentPlacementVariants = {
-  end: "lg:col-start-1 lg:row-start-1",
-  start: "lg:col-start-2 lg:row-start-1",
-} as const satisfies Record<PageAsidePosition, string>;
+  md: { end: "md:col-start-1 md:row-start-1", start: "md:col-start-2 md:row-start-1" },
+  lg: { end: "lg:col-start-1 lg:row-start-1", start: "lg:col-start-2 lg:row-start-1" },
+  xl: { end: "xl:col-start-1 xl:row-start-1", start: "xl:col-start-2 xl:row-start-1" },
+  "2xl": { end: "2xl:col-start-1 2xl:row-start-1", start: "2xl:col-start-2 2xl:row-start-1" },
+} as const satisfies Record<PageAsideBreakpoint, Record<PageAsidePosition, string>>;
 
 const asidePlacementVariants = {
-  end: "lg:col-start-2 lg:row-start-1",
-  start: "lg:col-start-1 lg:row-start-1",
-} as const satisfies Record<PageAsidePosition, string>;
+  md: { end: "md:col-start-2 md:row-start-1", start: "md:col-start-1 md:row-start-1" },
+  lg: { end: "lg:col-start-2 lg:row-start-1", start: "lg:col-start-1 lg:row-start-1" },
+  xl: { end: "xl:col-start-2 xl:row-start-1", start: "xl:col-start-1 xl:row-start-1" },
+  "2xl": { end: "2xl:col-start-2 2xl:row-start-1", start: "2xl:col-start-1 2xl:row-start-1" },
+} as const satisfies Record<PageAsideBreakpoint, Record<PageAsidePosition, string>>;
+
+// "hide" removes the aside below the breakpoint instead of stacking it.
+const asideHiddenVariants = {
+  md: "hidden md:block",
+  lg: "hidden lg:block",
+  xl: "hidden xl:block",
+  "2xl": "hidden 2xl:block",
+} as const satisfies Record<PageAsideBreakpoint, string>;
 
 type PageBodyProps = useRender.ComponentProps<"div"> & {
-  /** Supplementary column. Stacks below the content under lg. */
+  /** Supplementary column, placed beside the content from `asideBreakpoint` up. */
   aside?: ReactNode;
-  /** Aside width at lg and above: 16rem, 20rem, or 24rem. */
+  /** Aside width: 16rem, 20rem, or 24rem. Set --page-aside-width for any other width. */
   asideWidth?: PageAsideWidth;
-  /** Which side the aside sits on at lg and above. */
+  /** Which side the aside sits on from `asideBreakpoint` up. */
   asidePosition?: PageAsidePosition;
+  /** Breakpoint at which the aside moves beside the content. */
+  asideBreakpoint?: PageAsideBreakpoint;
+  /** Below the breakpoint, stack the aside under the content or hide it. */
+  asideCollapse?: PageAsideCollapse;
   /** Accessible name for the aside landmark. */
   asideLabel?: string;
+  /** Extra props for the aside element, for example a sticky className. */
+  asideProps?: Omit<ComponentProps<"aside">, "children">;
 };
 
 function PageBody({
   aside,
   asideWidth = "md",
   asidePosition = "end",
+  asideBreakpoint = "lg",
+  asideCollapse = "stack",
   asideLabel = "Supplementary information",
+  asideProps,
   className,
   children,
   render,
@@ -215,7 +253,10 @@ function PageBody({
     <>
       <div
         data-slot="page-content"
-        className={cn("min-w-0", hasAside && contentPlacementVariants[asidePosition])}
+        className={cn(
+          "min-w-0",
+          hasAside && contentPlacementVariants[asideBreakpoint][asidePosition],
+        )}
       >
         {children}
       </div>
@@ -224,7 +265,13 @@ function PageBody({
         <aside
           data-slot="page-aside"
           aria-label={asideLabel}
-          className={cn("min-w-0", asidePlacementVariants[asidePosition])}
+          {...asideProps}
+          className={cn(
+            "min-w-0",
+            asideCollapse === "hide" && asideHiddenVariants[asideBreakpoint],
+            asidePlacementVariants[asideBreakpoint][asidePosition],
+            asideProps?.className,
+          )}
         >
           {aside}
         </aside>
@@ -241,7 +288,8 @@ function PageBody({
         ...dataAttributes,
         className: cn(
           "grid min-w-0 grid-cols-1 items-start gap-6",
-          hasAside && asideTemplateVariants[asidePosition][asideWidth],
+          hasAside && asideWidthVariants[asideWidth],
+          hasAside && asideTemplateVariants[asideBreakpoint][asidePosition],
           className,
         ),
         children: content,
@@ -272,4 +320,6 @@ export type {
   PageBodyProps,
   PageAsideWidth,
   PageAsidePosition,
+  PageAsideBreakpoint,
+  PageAsideCollapse,
 };

@@ -1,7 +1,8 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Grid } from "@/components/ui/grid";
+import { Page } from "@/components/ui/page";
 import { Row } from "@/components/ui/row";
 import { Stack } from "@/components/ui/stack";
 import { adjacentPages } from "@/lib/navigation";
@@ -13,28 +14,40 @@ export interface TocEntry {
   title: string;
 }
 
+// Custom properties are not part of CSSProperties; this one sizes the TOC column.
+const tocWidth = { "--page-aside-width": "13rem" } as CSSProperties;
+
 export function DocLayout({ children, toc }: { children: ReactNode; toc?: TocEntry[] }) {
   return (
-    <Grid gap={12} className="min-[87.5rem]:grid-cols-[minmax(0,1fr)_13rem]">
+    <Page.Body
+      className="items-stretch gap-12"
+      style={tocWidth}
+      asideBreakpoint="xl"
+      asideCollapse="hide"
+      asideLabel="On this page"
+      asideProps={{ className: "sticky top-24 self-start pt-18" }}
+      aside={
+        toc && toc.length > 0 ? (
+          <Stack
+            render={<nav aria-label="Table of contents" />}
+            className="gap-[0.35rem] text-[0.78rem]"
+          >
+            <Eyebrow className="mb-2">On this page</Eyebrow>
+            {toc.map((entry) => (
+              <a
+                key={entry.id}
+                href={`#${entry.id}`}
+                className="border-l py-1 pl-[0.85rem] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+              >
+                {entry.title}
+              </a>
+            ))}
+          </Stack>
+        ) : null
+      }
+    >
       <article className={cn("min-w-0", enterAnimation)}>{children}</article>
-      {toc && toc.length > 0 && (
-        <Stack
-          render={<nav aria-label="On this page" />}
-          className="sticky top-24 hidden gap-[0.35rem] self-start pt-18 text-[0.78rem] min-[87.5rem]:flex"
-        >
-          <Eyebrow className="mb-2">On this page</Eyebrow>
-          {toc.map((entry) => (
-            <a
-              key={entry.id}
-              href={`#${entry.id}`}
-              className="border-l py-1 pl-[0.85rem] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-            >
-              {entry.title}
-            </a>
-          ))}
-        </Stack>
-      )}
-    </Grid>
+    </Page.Body>
   );
 }
 

@@ -292,26 +292,47 @@ export const primitives: Primitive[] = [
       {
         name: "Body.aside",
         type: "ReactNode",
-        description: "Supplementary column. Stacks below the content under lg.",
+        description:
+          "Supplementary column beside the content from asideBreakpoint up; below it the aside stacks or hides (asideCollapse).",
       },
       {
         name: "Body.asideWidth",
         type: '"sm" | "md" | "lg"',
         defaultValue: '"md"',
-        description: "Aside width at lg and above: 16rem, 20rem, or 24rem.",
+        description:
+          'Aside width: 16rem, 20rem, or 24rem. For any other width set --page-aside-width, e.g. style={{ "--page-aside-width": "13rem" }}.',
       },
       {
         name: "Body.asidePosition",
         type: '"start" | "end"',
         defaultValue: '"end"',
         description:
-          "Which side the aside sits on at lg and above. The content always keeps the flexible track and comes first in reading order.",
+          "Which side the aside sits on from asideBreakpoint up. The content always keeps the flexible track and comes first in reading order.",
+      },
+      {
+        name: "Body.asideBreakpoint",
+        type: '"md" | "lg" | "xl" | "2xl"',
+        defaultValue: '"lg"',
+        description: "Viewport breakpoint at which the aside moves beside the content.",
+      },
+      {
+        name: "Body.asideCollapse",
+        type: '"stack" | "hide"',
+        defaultValue: '"stack"',
+        description:
+          'Below the breakpoint, stack the aside under the content or hide it. Use "hide" for navigation that duplicates the page, such as a table of contents.',
       },
       {
         name: "Body.asideLabel",
         type: "string",
         defaultValue: '"Supplementary information"',
         description: "Accessible name for the aside landmark.",
+      },
+      {
+        name: "Body.asideProps",
+        type: 'ComponentProps<"aside">',
+        description:
+          'Extra props for the aside element, such as className="sticky top-24" for a rail that follows the scroll.',
       },
       {
         ...renderProp,

@@ -1,3 +1,4 @@
+import type React from "react";
 import { expect, test } from "vite-plus/test";
 import { isRenderable, Page, PageBody, PageRoot } from "@/components/ui/page";
 import { classes, render } from "./render";
@@ -73,7 +74,12 @@ test("Page.Body with the aside at the end keeps the flexible track first", () =>
   const content = body.querySelector('[data-slot="page-content"]')!;
   const aside = body.querySelector("aside")!;
 
-  expect(classes(body)).toContain("lg:grid-cols-[minmax(0,1fr)_16rem]");
+  expect(classes(body)).toEqual(
+    expect.arrayContaining([
+      "[--page-aside-width:16rem]",
+      "lg:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]",
+    ]),
+  );
   expect(classes(content)).toEqual(expect.arrayContaining(["lg:col-start-1", "lg:row-start-1"]));
   expect(classes(aside)).toEqual(expect.arrayContaining(["lg:col-start-2", "lg:row-start-1"]));
   expect(aside.getAttribute("aria-label")).toBe("Supplementary information");
@@ -90,8 +96,13 @@ test("Page.Body with the aside at the start mirrors the template so content stay
   const aside = body.querySelector("aside")!;
 
   expect(body.dataset.asidePosition).toBe("start");
-  expect(classes(body)).toContain("lg:grid-cols-[24rem_minmax(0,1fr)]");
-  expect(classes(body)).not.toContain("lg:grid-cols-[minmax(0,1fr)_24rem]");
+  expect(classes(body)).toEqual(
+    expect.arrayContaining([
+      "[--page-aside-width:24rem]",
+      "lg:grid-cols-[var(--page-aside-width)_minmax(0,1fr)]",
+    ]),
+  );
+  expect(classes(body)).not.toContain("lg:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]");
   // Content lands in the flexible second track, the aside in the fixed first track.
   expect(classes(content)).toEqual(expect.arrayContaining(["lg:col-start-2", "lg:row-start-1"]));
   expect(classes(aside)).toEqual(expect.arrayContaining(["lg:col-start-1", "lg:row-start-1"]));
@@ -99,6 +110,51 @@ test("Page.Body with the aside at the start mirrors the template so content stay
   // DOM order stays content first for reading order.
   expect(body.firstElementChild).toBe(content);
   expect(aside.getAttribute("aria-label")).toBe("Filters");
+});
+
+test("Page.Body moves the aside beside the content at asideBreakpoint", () => {
+  const body = render(
+    <Page.Body aside="Summary" asideBreakpoint="xl">
+      Main
+    </Page.Body>,
+  );
+  const content = body.querySelector('[data-slot="page-content"]')!;
+  const aside = body.querySelector("aside")!;
+
+  expect(classes(body)).toContain("xl:grid-cols-[minmax(0,1fr)_var(--page-aside-width)]");
+  expect(classes(body).some((name) => name.startsWith("lg:"))).toBe(false);
+  expect(classes(content)).toEqual(expect.arrayContaining(["xl:col-start-1", "xl:row-start-1"]));
+  expect(classes(aside)).toEqual(expect.arrayContaining(["xl:col-start-2", "xl:row-start-1"]));
+  // The default collapse stacks the aside, so it stays visible below xl.
+  expect(classes(aside)).not.toContain("hidden");
+});
+
+test('Page.Body asideCollapse="hide" hides the aside below the breakpoint', () => {
+  const aside = render(
+    <Page.Body aside="On this page" asideBreakpoint="2xl" asideCollapse="hide">
+      Main
+    </Page.Body>,
+  ).querySelector("aside")!;
+  expect(classes(aside)).toEqual(expect.arrayContaining(["hidden", "2xl:block"]));
+});
+
+test("Page.Body takes a custom aside width and aside props", () => {
+  const body = render(
+    <Page.Body
+      aside="Contents"
+      style={{ "--page-aside-width": "13rem" } as React.CSSProperties}
+      asideLabel="On this page"
+      asideProps={{ className: "sticky top-24", id: "toc" }}
+    >
+      Main
+    </Page.Body>,
+  );
+  const aside = body.querySelector("aside")!;
+
+  expect(body.style.getPropertyValue("--page-aside-width")).toBe("13rem");
+  expect(classes(aside)).toEqual(expect.arrayContaining(["min-w-0", "sticky", "top-24"]));
+  expect(aside.id).toBe("toc");
+  expect(aside.getAttribute("aria-label")).toBe("On this page");
 });
 
 test("Page.Actions renders a wrapping action row", () => {
