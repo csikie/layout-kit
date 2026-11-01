@@ -35,6 +35,14 @@ test("Page.Header renders a div with an h1 and optional slots", () => {
   expect(header.querySelector('[data-slot="page-header-actions"] button')).not.toBeNull();
 });
 
+test("Page.Header titleAs picks the heading level and keeps the title styling", () => {
+  const header = render(<Page.Header title="Orders" titleAs="h3" />);
+  const title = header.querySelector('[data-slot="page-title"]')!;
+  expect(title.tagName).toBe("H3");
+  expect(classes(title)).toContain("text-2xl");
+  expect(header.querySelector("h1")).toBeNull();
+});
+
 test("Page.Header skips empty slots and never prints a bare 0", () => {
   const header = render(<Page.Header title="Orders" metadata={0} description="" actions={false} />);
   expect(header.querySelector('[data-slot="page-metadata"]')).toBeNull();

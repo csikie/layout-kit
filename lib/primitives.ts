@@ -265,7 +265,14 @@ export const primitives: Primitive[] = [
       {
         name: "Header.title",
         type: "ReactNode",
-        description: "Rendered as the page h1.",
+        description: "The page heading, rendered as an h1 unless titleAs says otherwise.",
+      },
+      {
+        name: "Header.titleAs",
+        type: '"h1" | "h2" | "h3" | "h4" | "h5" | "h6"',
+        defaultValue: '"h1"',
+        description:
+          "Heading element for the title. Use a lower level when the Page is nested inside another page, such as a preview or a dialog.",
       },
       {
         name: "Header.description",
@@ -313,7 +320,7 @@ export const primitives: Primitive[] = [
       },
     ],
     notes: [
-      "Page.Header always renders an h1. Headings inside the body should start at h2.",
+      "Page.Header renders an h1 by default, so headings inside the body should start at h2. Nested pages pass a lower titleAs to keep one h1 per document.",
       "Page.Header is a div, not a header: a <header> outside <main> becomes the page banner, which usually belongs to your app shell.",
       "Empty slots render nothing: aside={false}, metadata={0}, or an empty description leave no wrapper and no stray text.",
       "PageRoot, PageHeader, PageActions, and PageBody are also exported standalone for custom composition.",

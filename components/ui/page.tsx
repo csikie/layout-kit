@@ -62,9 +62,16 @@ function PageRoot({ size = "lg", gutter = true, className, render, ...props }: P
  * element becomes the page's banner landmark, which usually belongs to the app
  * shell; pass `render={<header />}` when this header should be one.
  */
+type PageTitleElement = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+
 type PageHeaderProps = Omit<useRender.ComponentProps<"div">, "title"> & {
-  /** Rendered as the page h1. */
+  /** Rendered as the page heading, an h1 unless `titleAs` says otherwise. */
   title: ReactNode;
+  /**
+   * Heading element for the title. Keep the default h1 for a real page; pick a
+   * lower level when the Page is nested, for example in a preview or a dialog.
+   */
+  titleAs?: PageTitleElement;
   description?: ReactNode;
   /** Badges or status rendered inline after the title. */
   metadata?: ReactNode;
@@ -74,6 +81,7 @@ type PageHeaderProps = Omit<useRender.ComponentProps<"div">, "title"> & {
 
 function PageHeader({
   title,
+  titleAs: Title = "h1",
   description,
   metadata,
   actions,
@@ -86,9 +94,9 @@ function PageHeader({
     <>
       <div data-slot="page-header-content" className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <h1 data-slot="page-title" className="text-2xl font-semibold tracking-tight">
+          <Title data-slot="page-title" className="text-2xl font-semibold tracking-tight">
             {title}
-          </h1>
+          </Title>
 
           {isRenderable(metadata) && <div data-slot="page-metadata">{metadata}</div>}
         </div>
@@ -259,6 +267,7 @@ export type {
   PageProps,
   PageSize,
   PageHeaderProps,
+  PageTitleElement,
   PageActionsProps,
   PageBodyProps,
   PageAsideWidth,

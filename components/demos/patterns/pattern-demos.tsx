@@ -24,6 +24,7 @@ export function DashboardPatternDemo() {
   return (
     <Page size="xl">
       <Page.Header
+        titleAs="h3"
         title="Analytics"
         description="Last 30 days across all workspaces."
         metadata={<Badge variant="secondary">Live</Badge>}
@@ -92,7 +93,7 @@ const defaults = [
 export function SettingsPatternDemo() {
   return (
     <Page size="md">
-      <Page.Header title="Workspace" description="General settings for Studio Co." />
+      <Page.Header titleAs="h3" title="Workspace" description="General settings for Studio Co." />
       <Page.Body>
         <Stack gap={6}>
           <Card>
@@ -159,6 +160,7 @@ export function DetailPatternDemo() {
   return (
     <Page size="lg">
       <Page.Header
+        titleAs="h3"
         title={customer.name}
         description={customer.email}
         metadata={<Badge variant="secondary">{customer.plan}</Badge>}

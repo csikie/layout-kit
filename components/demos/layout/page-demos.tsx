@@ -37,6 +37,7 @@ export function PageOverviewDemo() {
     <div className="rounded-[0.6rem] border bg-background w-full overflow-hidden">
       <Page size="xl">
         <Page.Header
+          titleAs="h4"
           title="Design system rollout"
           description="Migrating every product surface to the shared component library."
           metadata={<Badge>Active</Badge>}
@@ -135,6 +136,7 @@ export function PagePlayground({ variants }: { variants: PlaygroundVariants<Page
       <div className="w-full border-x border-dashed">
         <Page size={size} className="outline-1 outline-dashed outline-sidebar-primary/40">
           <Page.Header
+            titleAs="h4"
             title="Workspace settings"
             description="Manage members, billing, and integrations."
             actions={
