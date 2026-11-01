@@ -19,7 +19,7 @@ jobs:
       # Public origin baked into the static export and the registry homepage.
       NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL || 'https://layout.csikie.com' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: voidzero-dev/setup-vp@v1.21.2
         with:
@@ -81,7 +81,7 @@ jobs:
       group: deploy-production
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: voidzero-dev/setup-vp@v1.21.2
         with:
