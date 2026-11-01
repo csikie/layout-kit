@@ -52,9 +52,19 @@ release. Add a tool name to select part of the graph. For example, run
   colour tokens unchanged; the only docs additions there are the `--font-serif`
   and `--font-mono` tokens. `app/globals.css` is the only stylesheet: style the
   docs with Tailwind utilities and lay them out with the kit's own primitives
-  (Stack, Row, Col, Grid, GridItem, Page). `tests/conventions.test.ts` rejects
-  other `.css` files and `<div className="flex|grid ...">` in docs, shell, and
-  demo code. Shared docs typography lives in `components/docs/typography.tsx`.
+  (Stack, Row, Col, Grid, GridItem, Page). When the element matters, use the
+  primitive's `render` prop (`<Stack render={<ul />}>`, `<Row render={<header />}>`)
+  instead of a hand-written flex element. `tests/conventions.test.ts` rejects
+  other `.css` files and block elements whose classes start with `flex`/`grid`
+  in docs, shell, and demo code. Shared docs typography lives in
+  `components/docs/typography.tsx`.
+- Layout primitives render through Base UI's `useRender`, so their registry
+  items list `@base-ui/react` in `dependencies`; `tests/registry.test.ts`
+  checks that declared and imported packages match.
+- Landmarks: only the page content is `<main id="main-content">`; the topbar
+  (`<header>`) and footer sit outside it (`components/shell/main.tsx`). Live
+  demos that render `Page.Header` pass a lower `titleAs`, so every page keeps
+  exactly one h1.
 - Custom breakpoints are written in rem (`min-[72rem]:`), so Tailwind orders
   them correctly next to `sm:`/`lg:`.
 - Theme switching uses `next-themes` (`components/shell/providers.tsx`).
