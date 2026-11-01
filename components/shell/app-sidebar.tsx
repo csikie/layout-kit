@@ -39,9 +39,9 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="offcanvas" aria-label="Documentation navigation">
       <SidebarHeader className="gap-5 p-5">
-        <Link
-          href="/"
-          className="flex items-center gap-[0.65rem] text-[1.6rem] leading-none font-[650] tracking-[-0.07em]"
+        <Row
+          render={<Link href="/" />}
+          className="gap-[0.65rem] text-[1.6rem] leading-none font-[650] tracking-[-0.07em]"
           onClick={() => setOpenMobile(false)}
         >
           <LogoMark className="size-8" />
@@ -49,7 +49,7 @@ export function AppSidebar() {
             layout<span className="font-[350]">kit</span>
             <span className="text-sidebar-primary">.</span>
           </span>
-        </Link>
+        </Row>
         <Row justify="between">
           <Eyebrow>Documentation</Eyebrow>
           <Badge variant="outline">v0.0.0</Badge>

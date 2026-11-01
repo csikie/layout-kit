@@ -1,4 +1,5 @@
-import type { ComponentProps } from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import {
   alignVariants,
   gapVariants,
@@ -11,7 +12,7 @@ import {
 } from "@/lib/spacing";
 import { cn } from "@/lib/utils";
 
-type RowProps = ComponentProps<"div"> & {
+type RowProps = useRender.ComponentProps<"div"> & {
   /** Space between children. */
   gap?: Responsive<Gap>;
   /** Cross-axis (vertical) alignment of children. */
@@ -29,22 +30,27 @@ function Row({
   justify = "start",
   wrap = false,
   className,
+  render,
   ...props
 }: RowProps) {
-  return (
-    <div
-      data-slot="row"
-      className={cn(
-        "flex min-w-0 flex-row",
-        wrap ? "flex-wrap" : "flex-nowrap",
-        responsiveClasses(gap, gapVariants),
-        responsiveClasses(align, alignVariants),
-        responsiveClasses(justify, justifyVariants),
-        className,
-      )}
-      {...props}
-    />
-  );
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "row" },
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "flex min-w-0 flex-row",
+          wrap ? "flex-wrap" : "flex-nowrap",
+          responsiveClasses(gap, gapVariants),
+          responsiveClasses(align, alignVariants),
+          responsiveClasses(justify, justifyVariants),
+          className,
+        ),
+      },
+      props,
+    ),
+  });
 }
 
 export { Row };

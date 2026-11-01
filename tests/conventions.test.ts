@@ -37,13 +37,23 @@ test("the docs site has no stylesheet besides the shadcn preset", () => {
   expect(["app", "components", "lib"].flatMap(cssFiles)).toEqual(["app/globals.css"]);
 });
 
-// Docs, shell, and demo code lays out with the primitives it documents: a div
-// whose classes start with a flex or grid display belongs in Stack, Row, or Grid.
-const rawLayoutDiv = /<div className="(?:flex|inline-flex|grid)\b/;
+// Docs, shell, and demo code lays out with the primitives it documents: a block
+// element whose classes start with a flex or grid display belongs in Stack, Row,
+// or Grid, with render={<nav />} (or <ul />, <header />, <Link />) for semantics.
+const rawLayoutElement =
+  /<(?:div|header|footer|nav|section|article|aside|main|ul|ol|li|a|Link)\b[^>]*?\sclassName=(?:\{cn\()?["`](?:flex|grid)\b/;
+
+test("the raw layout pattern catches block elements across lines", () => {
+  expect('<div className="flex gap-2">').toMatch(rawLayoutElement);
+  expect('<nav\n  aria-label="x"\n  className="grid gap-2"\n>').toMatch(rawLayoutElement);
+  expect('<ul className={cn("flex flex-col", className)}>').toMatch(rawLayoutElement);
+  expect('<span className="inline-flex gap-2">').not.toMatch(rawLayoutElement);
+  expect('<div className="hidden sm:flex">').not.toMatch(rawLayoutElement);
+});
 
 test.each(["app", "components/docs", "components/shell", "components/demos"].flatMap(sourceFiles))(
-  "%s lays out with Stack, Row, and Grid instead of flex/grid divs",
+  "%s lays out with Stack, Row, and Grid instead of flex/grid elements",
   (file) => {
-    expect(readFileSync(join(root, file), "utf8")).not.toMatch(rawLayoutDiv);
+    expect(readFileSync(join(root, file), "utf8")).not.toMatch(rawLayoutElement);
   },
 );

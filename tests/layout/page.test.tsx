@@ -17,7 +17,7 @@ test("Page root applies size and gutter classes", () => {
   expect(classes(full)).not.toContain("px-4");
 });
 
-test("Page.Header renders a header landmark with an h1 and optional slots", () => {
+test("Page.Header renders a div with an h1 and optional slots", () => {
   const header = render(
     <Page.Header
       title="Orders"
@@ -26,7 +26,8 @@ test("Page.Header renders a header landmark with an h1 and optional slots", () =
       actions={<button type="button">New</button>}
     />,
   );
-  expect(header.tagName).toBe("HEADER");
+  // A div by default, so it never competes with the app shell's banner landmark.
+  expect(header.tagName).toBe("DIV");
   expect(header.dataset.slot).toBe("page-header");
   expect(header.querySelector("h1")?.textContent).toBe("Orders");
   expect(header.querySelector('[data-slot="page-description"]')?.textContent).toBe("All orders");

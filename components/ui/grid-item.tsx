@@ -1,4 +1,5 @@
-import type { ComponentProps } from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import { responsiveClasses, type Responsive, type ResponsiveVariants } from "@/lib/spacing";
 import { cn } from "@/lib/utils";
 
@@ -67,20 +68,22 @@ const spanVariants = {
   },
 } as const satisfies ResponsiveVariants<GridSpan>;
 
-type GridItemProps = ComponentProps<"div"> & {
+type GridItemProps = useRender.ComponentProps<"div"> & {
   /** Columns to span, or a breakpoint map of spans. `"full"` spans the whole row. */
   span?: Responsive<GridSpan>;
 };
 
 /** A Grid cell that spans more than one column. */
-function GridItem({ span = 1, className, ...props }: GridItemProps) {
-  return (
-    <div
-      data-slot="grid-item"
-      className={cn("min-w-0", responsiveClasses(span, spanVariants), className)}
-      {...props}
-    />
-  );
+function GridItem({ span = 1, className, render, ...props }: GridItemProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "grid-item" },
+    props: mergeProps<"div">(
+      { className: cn("min-w-0", responsiveClasses(span, spanVariants), className) },
+      props,
+    ),
+  });
 }
 
 export { GridItem };

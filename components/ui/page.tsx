@@ -1,4 +1,6 @@
-import type { ComponentProps, ReactNode } from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -24,34 +26,43 @@ const pageSizeVariants = {
 
 type PageSize = keyof typeof pageSizeVariants;
 
-type PageProps = ComponentProps<"div"> & {
+type PageProps = useRender.ComponentProps<"div"> & {
   /** Maximum content width. */
   size?: PageSize;
   /** Responsive horizontal padding. */
   gutter?: boolean;
 };
 
-function PageRoot({ size = "lg", gutter = true, className, ...props }: PageProps) {
-  return (
-    <div
-      data-slot="page"
-      className={cn(
-        "mx-auto w-full min-w-0",
-        pageSizeVariants[size],
-        gutter && "px-4 sm:px-6 lg:px-8",
-        "py-6 md:py-8",
-        className,
-      )}
-      {...props}
-    />
-  );
+function PageRoot({ size = "lg", gutter = true, className, render, ...props }: PageProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "page" },
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "mx-auto w-full min-w-0",
+          pageSizeVariants[size],
+          gutter && "px-4 sm:px-6 lg:px-8",
+          "py-6 md:py-8",
+          className,
+        ),
+      },
+      props,
+    ),
+  });
 }
 
 // ------------------------------------------------------------------
 // Page.Header
 // ------------------------------------------------------------------
 
-type PageHeaderProps = Omit<ComponentProps<"header">, "title"> & {
+/**
+ * Page.Header renders a div by default. A <header> outside <main> or a sectioning
+ * element becomes the page's banner landmark, which usually belongs to the app
+ * shell; pass `render={<header />}` when this header should be one.
+ */
+type PageHeaderProps = Omit<useRender.ComponentProps<"div">, "title"> & {
   /** Rendered as the page h1. */
   title: ReactNode;
   description?: ReactNode;
@@ -68,18 +79,11 @@ function PageHeader({
   actions,
   className,
   children,
+  render,
   ...props
 }: PageHeaderProps) {
-  return (
-    <header
-      data-slot="page-header"
-      className={cn(
-        "mb-6 flex min-w-0 flex-col gap-4",
-        "sm:flex-row sm:items-start sm:justify-between",
-        className,
-      )}
-      {...props}
-    >
+  const content = (
+    <>
       <div data-slot="page-header-content" className="flex min-w-0 flex-1 flex-col gap-1">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <h1 data-slot="page-title" className="text-2xl font-semibold tracking-tight">
@@ -103,24 +107,43 @@ function PageHeader({
           {actions}
         </div>
       )}
-    </header>
+    </>
   );
+
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "page-header" },
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "mb-6 flex min-w-0 flex-col gap-4",
+          "sm:flex-row sm:items-start sm:justify-between",
+          className,
+        ),
+        children: content,
+      },
+      props,
+    ),
+  });
 }
 
 // ------------------------------------------------------------------
 // Page.Actions
 // ------------------------------------------------------------------
 
-type PageActionsProps = ComponentProps<"div">;
+type PageActionsProps = useRender.ComponentProps<"div">;
 
-function PageActions({ className, ...props }: PageActionsProps) {
-  return (
-    <div
-      data-slot="page-actions"
-      className={cn("flex flex-wrap items-center gap-2", className)}
-      {...props}
-    />
-  );
+function PageActions({ className, render, ...props }: PageActionsProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "page-actions" },
+    props: mergeProps<"div">(
+      { className: cn("flex flex-wrap items-center gap-2", className) },
+      props,
+    ),
+  });
 }
 
 // ------------------------------------------------------------------
@@ -156,7 +179,7 @@ const asidePlacementVariants = {
   start: "lg:col-start-1 lg:row-start-1",
 } as const satisfies Record<PageAsidePosition, string>;
 
-type PageBodyProps = ComponentProps<"div"> & {
+type PageBodyProps = useRender.ComponentProps<"div"> & {
   /** Supplementary column. Stacks below the content under lg. */
   aside?: ReactNode;
   /** Aside width at lg and above: 16rem, 20rem, or 24rem. */
@@ -174,21 +197,14 @@ function PageBody({
   asideLabel = "Supplementary information",
   className,
   children,
+  render,
   ...props
 }: PageBodyProps) {
   const hasAside = isRenderable(aside);
+  const dataAttributes = { "data-aside-position": hasAside ? asidePosition : undefined };
 
-  return (
-    <div
-      data-slot="page-body"
-      data-aside-position={hasAside ? asidePosition : undefined}
-      className={cn(
-        "grid min-w-0 grid-cols-1 items-start gap-6",
-        hasAside && asideTemplateVariants[asidePosition][asideWidth],
-        className,
-      )}
-      {...props}
-    >
+  const content = (
+    <>
       <div
         data-slot="page-content"
         className={cn("min-w-0", hasAside && contentPlacementVariants[asidePosition])}
@@ -205,8 +221,26 @@ function PageBody({
           {aside}
         </aside>
       )}
-    </div>
+    </>
   );
+
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "page-body" },
+    props: mergeProps<"div">(
+      {
+        ...dataAttributes,
+        className: cn(
+          "grid min-w-0 grid-cols-1 items-start gap-6",
+          hasAside && asideTemplateVariants[asidePosition][asideWidth],
+          className,
+        ),
+        children: content,
+      },
+      props,
+    ),
+  });
 }
 
 // ------------------------------------------------------------------

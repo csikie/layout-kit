@@ -8,7 +8,10 @@ const namespace = "@layout-kit";
 
 const primitives = ["stack", "row", "col", "grid", "grid-item", "page"] as const;
 
-type Item = (typeof registry.items)[number] & { registryDependencies?: string[] };
+type Item = (typeof registry.items)[number] & {
+  dependencies?: string[];
+  registryDependencies?: string[];
+};
 const items = registry.items as Item[];
 
 function item(name: string) {
@@ -67,19 +70,40 @@ test("registryDependencies match each file's @/lib imports", () => {
   }
 });
 
-test("registry files only import React, their own lib items, or @/lib/utils", () => {
+/** npm packages a registry file may import, provided its item lists them in `dependencies`. */
+const allowedPackages = new Set(["@base-ui/react"]);
+
+function packageName(specifier: string) {
+  const [scope, name] = specifier.split("/");
+  return specifier.startsWith("@") ? `${scope}/${name}` : scope!;
+}
+
+test("registry files only import React, their own lib items, @/lib/utils, or declared packages", () => {
   for (const entry of items) {
     for (const file of entry.files) {
       const source = readFileSync(join(root, file.path), "utf8");
       for (const [, specifier] of source.matchAll(/from\s+"([^"]+)"/g)) {
-        expect(
-          specifier === "react" ||
-            specifier === "@/lib/utils" ||
-            libItemsBySpecifier.has(specifier!),
-          `${file.path} imports ${specifier}`,
-        ).toBe(true);
+        if (specifier === "react" || specifier === "@/lib/utils") continue;
+        if (libItemsBySpecifier.has(specifier!)) continue;
+        const name = packageName(specifier!);
+        expect(allowedPackages.has(name), `${file.path} imports ${specifier}`).toBe(true);
+        expect(entry.dependencies ?? [], `${entry.name} must declare ${name}`).toContain(name);
       }
     }
+  }
+});
+
+test("dependencies list only packages the item's files import", () => {
+  for (const entry of items) {
+    const imported = new Set(
+      entry.files.flatMap((file) =>
+        [...readFileSync(join(root, file.path), "utf8").matchAll(/from\s+"([^"]+)"/g)]
+          .map(([, specifier]) => specifier!)
+          .filter((specifier) => !specifier.startsWith("@/") && specifier !== "react")
+          .map(packageName),
+      ),
+    );
+    expect(new Set(entry.dependencies ?? []), entry.name).toEqual(imported);
   }
 });
 

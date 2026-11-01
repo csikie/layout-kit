@@ -26,6 +26,14 @@ export interface Primitive {
 const gapType = "Responsive<0 | 1 | 2 | 3 | 4 | 6 | 8 | 12>";
 const alignType = 'Responsive<"start" | "center" | "end" | "stretch" | "baseline">';
 const justifyType = 'Responsive<"start" | "center" | "end" | "between" | "around" | "evenly">';
+const renderProp: PropDefinition = {
+  name: "render",
+  type: "ReactElement | (props, state) => ReactElement",
+  description:
+    "Replaces the rendered element, for example render={<ul />}. Classes, data-slot, ref, and event handlers carry over.",
+};
+const renderNote =
+  "Put className on the primitive, not on the render element: the primitive resolves conflicting utilities, while classes on the element are appended as they are.";
 const responsiveNote =
   "Responsive props take a single value or a map of base, sm, md, lg, xl, and 2xl. Breakpoints use Tailwind defaults: sm 640px, md 768px, lg 1024px, xl 1280px, 2xl 1536px.";
 
@@ -63,11 +71,13 @@ export const primitives: Primitive[] = [
         defaultValue: '"start"',
         description: "Main-axis (vertical) distribution, mapped to the justify-* utilities.",
       },
+      renderProp,
     ],
     notes: [
       "Stack never adds outer margin. Spacing between a Stack and its siblings belongs to the parent.",
       "Stack and Row accept exactly the same gap, align, and justify values; only the axis and the align default differ.",
       responsiveNote,
+      renderNote,
     ],
   },
   {
@@ -104,11 +114,13 @@ export const primitives: Primitive[] = [
         defaultValue: "false",
         description: "Allow children to flow onto additional lines.",
       },
+      renderProp,
     ],
     notes: [
       'Row centers children vertically by default. Use align="start" when children have different heights and should share a top edge.',
       "Wrap a child in Col when it should grow into the remaining width or keep its intrinsic size.",
       responsiveNote,
+      renderNote,
     ],
   },
   {
@@ -145,10 +157,12 @@ export const primitives: Primitive[] = [
         defaultValue: '"auto"',
         description: "Override the parent's align for this child only (self-* utilities).",
       },
+      renderProp,
     ],
     notes: [
       "Col is not a container. To space its children, nest a Stack or Row inside it.",
       "A Col with shrink={false} keeps its intrinsic width. Give it an explicit width class when the content is flexible.",
+      renderNote,
     ],
   },
   {
@@ -184,10 +198,12 @@ export const primitives: Primitive[] = [
         defaultValue: '"stretch"',
         description: "Vertical alignment of items within their row.",
       },
+      renderProp,
     ],
     notes: [
       responsiveNote,
       "Every class in the responsive maps is written out in the component source, so Tailwind always generates it.",
+      renderNote,
     ],
   },
   {
@@ -211,10 +227,12 @@ export const primitives: Primitive[] = [
         defaultValue: "1",
         description: 'Columns to span per breakpoint. "full" spans the entire row.',
       },
+      renderProp,
     ],
     notes: [
       "GridItem is optional. Cells that span a single column can be plain children of Grid.",
       "A span larger than the parent's column count wraps to its own row, matching CSS Grid behavior.",
+      renderNote,
     ],
   },
   {
@@ -224,7 +242,7 @@ export const primitives: Primitive[] = [
     tagline: "The complete frame",
     description:
       "Page is the outer frame for a screen. It sets the max width and gutters, renders a header with title, metadata, and actions, and lays out a body with an optional aside on either side.",
-    renders: "div > header + div.grid",
+    renders: "div > div + div.grid",
     usageImports: ["Page"],
     whenToUse: [
       "Every top-level route in an application shell.",
@@ -288,11 +306,18 @@ export const primitives: Primitive[] = [
         defaultValue: '"Supplementary information"',
         description: "Accessible name for the aside landmark.",
       },
+      {
+        ...renderProp,
+        description:
+          "Replaces the element of Page, Page.Header, Page.Body, or Page.Actions. Page.Header is a div by default; pass render={<header />} when it should be a landmark.",
+      },
     ],
     notes: [
       "Page.Header always renders an h1. Headings inside the body should start at h2.",
+      "Page.Header is a div, not a header: a <header> outside <main> becomes the page banner, which usually belongs to your app shell.",
       "Empty slots render nothing: aside={false}, metadata={0}, or an empty description leave no wrapper and no stray text.",
       "PageRoot, PageHeader, PageActions, and PageBody are also exported standalone for custom composition.",
+      renderNote,
     ],
   },
 ];

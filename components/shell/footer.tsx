@@ -35,7 +35,7 @@ export function Footer() {
           .
         </p>
         <nav aria-label="Project links">
-          <ul className="flex flex-wrap gap-5">
+          <Row render={<ul />} wrap className="gap-5">
             {links.map((link) => (
               <li key={link.label}>
                 <a href={link.href} className={linkClassName} {...external(link.href)}>
@@ -43,7 +43,7 @@ export function Footer() {
                 </a>
               </li>
             ))}
-          </ul>
+          </Row>
         </nav>
       </Row>
     </footer>

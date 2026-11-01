@@ -14,6 +14,7 @@
       "type": "registry:ui",
       "title": "Stack",
       "description": "Vertical flex container with responsive gap, align, and justify.",
+      "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@layout-kit/layout-spacing"],
       "files": [{ "path": "components/ui/stack.tsx", "type": "registry:ui" }]
     },
@@ -22,6 +23,7 @@
       "type": "registry:ui",
       "title": "Row",
       "description": "Horizontal flex container with responsive gap, align, and justify, plus wrapping.",
+      "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@layout-kit/layout-spacing"],
       "files": [{ "path": "components/ui/row.tsx", "type": "registry:ui" }]
     },
@@ -30,6 +32,7 @@
       "type": "registry:ui",
       "title": "Col",
       "description": "Flex child with explicit grow, shrink, and self-alignment.",
+      "dependencies": ["@base-ui/react"],
       "files": [{ "path": "components/ui/col.tsx", "type": "registry:ui" }]
     },
     {
@@ -37,6 +40,7 @@
       "type": "registry:ui",
       "title": "Grid",
       "description": "CSS grid with responsive column count, gap, and alignment.",
+      "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@layout-kit/layout-spacing"],
       "files": [{ "path": "components/ui/grid.tsx", "type": "registry:ui" }]
     },
@@ -45,6 +49,7 @@
       "type": "registry:ui",
       "title": "GridItem",
       "description": "Responsive column span inside a Grid.",
+      "dependencies": ["@base-ui/react"],
       "registryDependencies": ["@layout-kit/layout-spacing"],
       "files": [{ "path": "components/ui/grid-item.tsx", "type": "registry:ui" }]
     },
@@ -53,6 +58,7 @@
       "type": "registry:ui",
       "title": "Page",
       "description": "Page frame with header, actions, body, and an optional aside on either side.",
+      "dependencies": ["@base-ui/react"],
       "files": [{ "path": "components/ui/page.tsx", "type": "registry:ui" }]
     },
     {

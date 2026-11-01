@@ -1,4 +1,5 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
+import { Stack } from "@/components/ui/stack";
 import { cn } from "@/lib/utils";
 
 /** Small uppercase mono label used above headings and in sidebars. */
@@ -23,15 +24,17 @@ function Lede({ className, ...props }: ComponentProps<"p">) {
 }
 
 /** Bulleted list for notes and "when to use" guidance. */
-function ProseList({ className, ...props }: ComponentProps<"ul">) {
+function ProseList({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <ul
+    <Stack
+      render={<ul />}
       className={cn(
-        "flex list-disc flex-col gap-[0.6rem] pl-[1.1rem] text-[0.9rem] leading-[1.7] marker:text-sidebar-primary",
+        "list-disc gap-[0.6rem] pl-[1.1rem] text-[0.9rem] leading-[1.7] marker:text-sidebar-primary",
         className,
       )}
-      {...props}
-    />
+    >
+      {children}
+    </Stack>
   );
 }
 

@@ -1,4 +1,5 @@
-import type { ComponentProps } from "react";
+import { mergeProps } from "@base-ui/react/merge-props";
+import { useRender } from "@base-ui/react/use-render";
 import {
   alignVariants,
   gapVariants,
@@ -69,7 +70,7 @@ const columnVariants = {
   },
 } as const satisfies ResponsiveVariants<GridColumns>;
 
-type GridProps = ComponentProps<"div"> & {
+type GridProps = useRender.ComponentProps<"div"> & {
   /** Column count, or a breakpoint map of column counts. */
   cols?: Responsive<GridColumns>;
   /** Space between rows and columns. */
@@ -79,20 +80,24 @@ type GridProps = ComponentProps<"div"> & {
 };
 
 /** CSS grid with a typed, responsive column count. */
-function Grid({ cols = 1, gap = 4, align = "stretch", className, ...props }: GridProps) {
-  return (
-    <div
-      data-slot="grid"
-      className={cn(
-        "grid min-w-0",
-        responsiveClasses(cols, columnVariants),
-        responsiveClasses(gap, gapVariants),
-        responsiveClasses(align, alignVariants),
-        className,
-      )}
-      {...props}
-    />
-  );
+function Grid({ cols = 1, gap = 4, align = "stretch", className, render, ...props }: GridProps) {
+  return useRender({
+    defaultTagName: "div",
+    render,
+    state: { slot: "grid" },
+    props: mergeProps<"div">(
+      {
+        className: cn(
+          "grid min-w-0",
+          responsiveClasses(cols, columnVariants),
+          responsiveClasses(gap, gapVariants),
+          responsiveClasses(align, alignVariants),
+          className,
+        ),
+      },
+      props,
+    ),
+  });
 }
 
 export { Grid };

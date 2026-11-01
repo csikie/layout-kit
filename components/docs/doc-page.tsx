@@ -18,9 +18,9 @@ export function DocLayout({ children, toc }: { children: ReactNode; toc?: TocEnt
     <Grid gap={12} className="min-[87.5rem]:grid-cols-[minmax(0,1fr)_13rem]">
       <article className={cn("min-w-0", enterAnimation)}>{children}</article>
       {toc && toc.length > 0 && (
-        <nav
-          aria-label="On this page"
-          className="sticky top-24 hidden flex-col gap-[0.35rem] self-start pt-18 text-[0.78rem] min-[87.5rem]:flex"
+        <Stack
+          render={<nav aria-label="On this page" />}
+          className="sticky top-24 hidden gap-[0.35rem] self-start pt-18 text-[0.78rem] min-[87.5rem]:flex"
         >
           <Eyebrow className="mb-2">On this page</Eyebrow>
           {toc.map((entry) => (
@@ -32,7 +32,7 @@ export function DocLayout({ children, toc }: { children: ReactNode; toc?: TocEnt
               {entry.title}
             </a>
           ))}
-        </nav>
+        </Stack>
       )}
     </Grid>
   );
@@ -139,7 +139,7 @@ export function Example({
 }
 
 const pageLinkClassName =
-  "flex min-w-0 flex-col gap-1 rounded-[0.6rem] border px-4 py-[0.85rem] transition-colors hover:border-foreground hover:bg-muted sm:px-5 sm:py-4";
+  "rounded-[0.6rem] border px-4 py-[0.85rem] transition-colors hover:border-foreground hover:bg-muted sm:px-5 sm:py-4";
 
 export function DocPagination({ href }: { href: string }) {
   const { previous, next } = adjacentPages(href);
@@ -147,19 +147,21 @@ export function DocPagination({ href }: { href: string }) {
     <nav aria-label="Previous and next pages" className="mt-16">
       <Grid cols={2} gap={{ base: 3, sm: 4 }}>
         {previous && (
-          <Link href={previous.href} className={pageLinkClassName}>
+          <Stack render={<Link href={previous.href} />} gap={1} className={pageLinkClassName}>
             <Eyebrow>Previous</Eyebrow>
             <span className="truncate text-sm font-medium">{previous.title}</span>
-          </Link>
+          </Stack>
         )}
         {next && (
-          <Link
-            href={next.href}
-            className={cn(pageLinkClassName, "col-start-2 items-end text-right")}
+          <Stack
+            render={<Link href={next.href} />}
+            gap={1}
+            align="end"
+            className={cn(pageLinkClassName, "col-start-2 text-right")}
           >
             <Eyebrow>Next</Eyebrow>
             <span className="truncate text-sm font-medium">{next.title}</span>
-          </Link>
+          </Stack>
         )}
       </Grid>
     </nav>

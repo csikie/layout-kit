@@ -6,6 +6,7 @@ import { DocHeader, DocLayout, DocPagination, Section } from "@/components/docs/
 import { PropsTable } from "@/components/docs/props-table";
 import { PrimitiveExamples } from "@/components/demos/layout/examples";
 import { layoutImports } from "@/lib/examples/imports";
+import { renderExamples } from "@/lib/examples/render";
 import { pageMetadata } from "@/lib/metadata";
 import { findPrimitive, primitives } from "@/lib/primitives";
 import { Grid } from "@/components/ui/grid";
@@ -37,6 +38,7 @@ export async function generateMetadata({
 const toc = [
   { id: "usage", title: "Usage" },
   { id: "examples", title: "Examples" },
+  { id: "render", title: "Element" },
   { id: "api", title: "Props" },
   { id: "notes", title: "Notes" },
 ];
@@ -81,6 +83,15 @@ export default async function PrimitivePage({ params }: { params: Promise<{ slug
         lede="Each example is a real composition with shadcn components. Switch to the Code tab for the source, or copy it directly."
       >
         <PrimitiveExamples slug={primitive.slug} />
+      </Section>
+
+      <Section
+        id="render"
+        eyebrow="Semantics"
+        title="Rendering a different element"
+        lede={`${primitive.name} renders a div by default. Pass an element to render when the markup needs a list, a landmark, or a link; the layout classes, data-slot, ref, and event handlers move onto it.`}
+      >
+        <CodeBlock code={renderExamples[primitive.slug]} title="render" />
       </Section>
 
       <Section
