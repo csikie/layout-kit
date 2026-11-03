@@ -22,6 +22,7 @@ import {
 import { Eyebrow, eyebrowClassName } from "@/components/docs/typography";
 import { Row } from "@/components/ui/row";
 import { navigation } from "@/lib/navigation";
+import { version } from "@/lib/site";
 import { LogoMark } from "./logo-mark";
 
 export function AppSidebar() {
@@ -52,7 +53,7 @@ export function AppSidebar() {
         </Row>
         <Row justify="between">
           <Eyebrow>Documentation</Eyebrow>
-          <Badge variant="outline">v0.0.0</Badge>
+          <Badge variant="outline">v{version}</Badge>
         </Row>
         <SidebarInput
           aria-label="Filter pages"

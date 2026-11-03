@@ -1,6 +1,6 @@
 {
   "name": "csikie.layout-kit",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "private": true,
   "description": "Typed React layout primitives distributed as a shadcn registry, with the docs site that hosts it.",
   "homepage": "https://layout.csikie.com",

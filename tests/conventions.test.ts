@@ -57,3 +57,9 @@ test.each(["app", "components/docs", "components/shell", "components/demos"].fla
     expect(readFileSync(join(root, file), "utf8")).not.toMatch(rawLayoutElement);
   },
 );
+
+test("the sidebar version matches package.json", async () => {
+  const { version } = await import("@/lib/site");
+  const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8")) as { version: string };
+  expect(pkg.version.startsWith(`${version}.`)).toBe(true);
+});

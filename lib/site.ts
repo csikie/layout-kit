@@ -9,6 +9,9 @@ const siteUrl = process.env.NODE_ENV === "production" ? productionSiteUrl : deve
 
 const siteName = "Layout Kit";
 
+/** Release shown in the sidebar; package.json carries the full semver. */
+const version = "0.5";
+
 /** Source repository on GitHub. */
 const repositoryUrl = "https://github.com/csikie/layout-kit";
 
@@ -23,6 +26,7 @@ export {
   productionSiteUrl,
   developmentSiteUrl,
   siteName,
+  version,
   registryNamespace,
   repositoryUrl,
   author,
