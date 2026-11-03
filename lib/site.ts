@@ -1,31 +1,11 @@
+/** Public origin of the docs site and registry. */
+const productionSiteUrl = "https://layout.csikie.com";
+
+/** Origin of `next dev`, so local pages and registry JSON point at themselves. */
 const developmentSiteUrl = "http://localhost:3000";
 
-/**
- * Normalises a configured site origin. Throws when `strict` and the value is
- * missing, and whenever the value is not an absolute http(s) URL.
- */
-function resolveSiteUrl(value: string | undefined, { strict }: { strict: boolean }): string {
-  const raw = value?.trim();
-  if (!raw) {
-    if (strict) {
-      throw new Error(
-        "NEXT_PUBLIC_SITE_URL is required for production builds. Set it to the public origin of the docs site (see .env.example).",
-      );
-    }
-    return developmentSiteUrl;
-  }
-
-  const url = new URL(raw);
-  if (url.protocol !== "https:" && url.protocol !== "http:") {
-    throw new Error(`NEXT_PUBLIC_SITE_URL must be an http(s) URL, received "${raw}".`);
-  }
-  return url.href.replace(/\/+$/, "");
-}
-
-/** Public origin of the docs site and registry, without a trailing slash. */
-const siteUrl = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL, {
-  strict: process.env.NODE_ENV === "production",
-});
+/** The origin this build serves from, without a trailing slash. */
+const siteUrl = process.env.NODE_ENV === "production" ? productionSiteUrl : developmentSiteUrl;
 
 const siteName = "Layout Kit";
 
@@ -38,4 +18,12 @@ const author = { name: "Erik Csiki-Gecse", url: "https://github.com/csikie" };
 /** Registry namespace consumers add to their components.json. */
 const registryNamespace = "@layout-kit";
 
-export { siteUrl, siteName, registryNamespace, repositoryUrl, author, resolveSiteUrl };
+export {
+  siteUrl,
+  productionSiteUrl,
+  developmentSiteUrl,
+  siteName,
+  registryNamespace,
+  repositoryUrl,
+  author,
+};

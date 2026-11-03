@@ -5,7 +5,7 @@ import nextConfig from "@/next.config";
 
 const root = join(import.meta.dirname, "..");
 
-/** Parses a Cloudflare `_headers` file into `{ pattern: { header: value } }`. */
+/** Parses a `_headers` file into `{ pattern: { header: value } }`. */
 function parseHeadersFile(source: string) {
   const rules: Record<string, Record<string, string>> = {};
   let current: Record<string, string> | undefined;
@@ -22,9 +22,9 @@ function parseHeadersFile(source: string) {
   return rules;
 }
 
-const rules = parseHeadersFile(readFileSync(join(root, "public/_headers"), "utf8"));
+const rules = parseHeadersFile(readFileSync(join(root, ".github/deploy/_headers"), "utf8"));
 
-test("the site is a static export, so headers come from public/_headers", () => {
+test("the site is a static export, so headers come from the deploy _headers file", () => {
   expect(nextConfig.output).toBe("export");
   expect(nextConfig).not.toHaveProperty("headers");
 });

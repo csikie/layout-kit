@@ -9,14 +9,29 @@ request. By contributing you agree that your contribution is licensed under the
 
 ## Setup
 
+The project uses [Vite+](https://viteplus.dev) (`vp`) with bun.
+
 ```bash
-vp install
-cp .env.example .env.local   # only needed for production builds
-vp run dev
+vp install   # dependencies and the pre-commit hook (vp check --fix on staged files)
+vp run dev   # builds the registry for localhost and starts next dev
 ```
 
-`vp install` also installs the pre-commit hook, which runs `vp check --fix` on
-staged files.
+## Project layout
+
+One Next.js app is both the documentation site and the registry source, so the
+files the docs render are the files the registry ships.
+
+```
+app/                      docs pages (Next.js App Router); globals.css is the only stylesheet
+components/ui/            shadcn components and the six layout primitives (registry source)
+components/docs|demos|shell/   docs chrome, live demos, app shell
+lib/spacing.ts            shared layout vocabulary (registry:lib)
+lib/primitives.ts         prop tables and notes shown on the docs
+lib/examples/             code samples; imports.ts holds the import prefix
+registry.json             registry items, pointing straight at components/ui and lib
+scripts/build-registry.ts adds the homepage and runs `shadcn build` into public/r
+tests/                    vitest (jsdom)
+```
 
 ## Before you open a pull request
 
@@ -26,10 +41,8 @@ Run the same steps as CI:
 vp check
 vp run test
 vp run typecheck
-NEXT_PUBLIC_SITE_URL=https://example.com vp run build
+vp run build   # registry and static export into out/
 ```
-
-`vp run preview` serves the static export from `out/` through `wrangler dev`.
 
 ## Changing a layout primitive
 
@@ -38,9 +51,11 @@ NEXT_PUBLIC_SITE_URL=https://example.com vp run build
   to one component stay in its file and are exported from it.
 - Write every Tailwind class out in full. Tailwind cannot see class names built
   with template strings.
-- Registry files may only import `react`, `@/lib/utils`, and registry lib files.
-  If you add a lib import, add the matching `registryDependencies` entry;
-  `tests/registry.test.ts` fails otherwise.
+- Registry files may only import `react`, `@/lib/utils`, registry lib files, and
+  `@base-ui/react`. Keep `registryDependencies` and `dependencies` in
+  `registry.json` in step with the imports; `tests/registry.test.ts` checks both.
+- Use the primitive's `render` prop when the element matters
+  (`<Stack render={<ul />}>`) instead of a hand-written flex element.
 - Add or update render tests in `tests/layout/`: default classes, `data-slot`,
   scalar and responsive values, and `className` conflict resolution.
 - Update the prop table in `lib/primitives.ts` and the examples in

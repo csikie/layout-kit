@@ -13,10 +13,10 @@ export default defineConfig({
     "*": "vp check --fix",
   },
   fmt: {
-    ignorePatterns: ["public/r/**", ".next/**", "out/**", ".wrangler/**", "next-env.d.ts"],
+    ignorePatterns: ["public/r/**", ".next/**", "out/**", "next-env.d.ts"],
   },
   lint: {
-    ignorePatterns: ["public/r/**", ".next/**", "out/**", ".wrangler/**", "next-env.d.ts"],
+    ignorePatterns: ["public/r/**", ".next/**", "out/**", "next-env.d.ts"],
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },
     options: { typeAware: true, typeCheck: true },
@@ -28,13 +28,10 @@ export default defineConfig({
   run: {
     cache: true,
     tasks: {
-      // Side effects, never cached: serve out/ locally, or upload it to Cloudflare.
-      preview: { command: "wrangler dev", cache: false },
-      deploy: { command: "wrangler deploy", cache: false },
       "registry:build": {
         command: "vpx ./scripts/build-registry.ts",
         cache: {
-          env: ["NEXT_PUBLIC_SITE_URL", "NODE_ENV"],
+          env: ["NODE_ENV"],
           input: [{ auto: true }, "!public/r/**", "!node_modules/.cache/**"],
           output: ["public/r/**"],
         },
@@ -43,7 +40,7 @@ export default defineConfig({
         command: "next build",
         dependsOn: ["registry:build"],
         cache: {
-          env: ["NEXT_PUBLIC_SITE_URL", "NODE_ENV"],
+          env: ["NODE_ENV"],
           input: [{ auto: true }, "!.next/**", "!out/**", "!next-env.d.ts", "!*.tsbuildinfo"],
           output: [".next/**", "!.next/cache/**", "out/**"],
         },

@@ -1,14 +1,14 @@
+// Production deploy of the docs site (used by the deploy job in ci.yml).
+// Paths are relative to this file.
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "layout-kit",
   "compatibility_date": "2026-10-30",
-  // Static assets only: no Worker script, so every request is a free asset request.
+  // Static assets only: no Worker script.
   "assets": {
-    "directory": "./out",
+    "directory": "../../out",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
   },
-  // Serve only on the custom domain, so search engines see one origin.
   "workers_dev": false,
   "preview_urls": false,
   "routes": [{ "pattern": "layout.csikie.com", "custom_domain": true }],
