@@ -73,7 +73,7 @@ export function AppSidebar() {
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton
-                        render={<Link href={item.href} />}
+                        render={<Link href={item.href} prefetch={false} />}
                         isActive={active}
                         className="data-active:[--sidebar-accent-foreground:var(--primary-foreground)] data-active:[--sidebar-accent:var(--primary)]"
                         onClick={() => setOpenMobile(false)}

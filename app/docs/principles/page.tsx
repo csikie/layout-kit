@@ -4,8 +4,9 @@ import { CodeBlock } from "@/components/docs/code-block";
 import { DocHeader, DocLayout, DocPagination, Section } from "@/components/docs/doc-page";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Principles",
-  description: "The rules every Layout Kit primitive follows.",
+  title: "React Layout Principles",
+  description:
+    "Understand parent-owned spacing, responsive Tailwind props, semantic rendering, and the boundaries of Layout Kit’s React components.",
   path: "/docs/principles",
 });
 
@@ -30,8 +31,8 @@ const principles = [
   {
     id: "one-element",
     eyebrow: "02",
-    title: "One element, no runtime.",
-    body: "Each primitive renders a single element with utility classes. There is no measurement, no context, and nothing to hydrate. What you see in the DOM is what you wrote.",
+    title: "CSS handles the layout.",
+    body: "Stack, Row, Col, Grid, and GridItem render one element through Base UI’s useRender. Page composes a frame and optional regions. Responsive behavior uses Tailwind classes and CSS media queries, without JavaScript viewport measurements. React rendering and Base UI still run; this is not a zero-runtime promise.",
     code: `<Row gap={2} justify="between" />
 // renders
 <div data-slot="row" class="flex min-w-0 flex-row flex-nowrap gap-2 items-center justify-between" />`,
@@ -62,8 +63,8 @@ type Responsive<T> = T | Partial<Record<Breakpoint, T>>;
   {
     id: "min-width-zero",
     eyebrow: "05",
-    title: "Content never breaks the frame.",
-    body: "Every primitive sets min-w-0, because flex and grid children otherwise refuse to shrink below their content. Long text truncates; tables scroll; the layout holds.",
+    title: "Allow content regions to shrink.",
+    body: "Every primitive sets min-w-0, because flex and grid children can otherwise refuse to shrink below their content. Add truncate for a single line, wrapping for long text, or an overflow region for a wide table. min-w-0 enables those choices; it does not apply them automatically.",
     code: `<Row>
   <Col grow>
     {/* truncate works here because Col sets min-w-0 */}
@@ -94,7 +95,7 @@ export default function PrinciplesPage() {
       <DocHeader
         eyebrow="Getting started"
         title="Principles"
-        description="Six rules shape every primitive. Knowing them makes the API predictable before you read a single prop table."
+        description="Six rules shape these React layout primitives: parent-owned spacing, CSS-driven responsiveness, typed values, native props, shrinking, and clear container responsibilities."
       />
       {principles.map((item) => (
         <Section

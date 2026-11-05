@@ -1,11 +1,27 @@
 import type { Metadata } from "next";
 import { siteName, siteUrl } from "./site";
 
-const defaultTitle = `${siteName} — Documentation`;
+const defaultTitle = `React Layout Primitives for shadcn/ui — ${siteName}`;
 const siteDescription =
-  "Small, composable React layout primitives. Explore Stack, Row, Col, Grid, GridItem, and Page with live examples and API references.";
+  "Build responsive React layouts with typed Stack, Row, Grid, and Page components. Install from the shadcn registry, customize the source, and keep your Tailwind styles.";
 
-const openGraphDefaults = { type: "website", siteName, locale: "en_US" } as const;
+const socialImage = {
+  url: "/og.png",
+  width: 1200,
+  height: 630,
+  alt: "Layout Kit — typed React layout primitives for shadcn/ui and Tailwind CSS",
+};
+
+const openGraphDefaults = {
+  type: "website",
+  siteName,
+  locale: "en_US",
+  images: [socialImage],
+} satisfies NonNullable<Metadata["openGraph"]>;
+const twitterDefaults = {
+  card: "summary_large_image",
+  images: [socialImage.url],
+} satisfies NonNullable<Metadata["twitter"]>;
 
 /** Site-wide defaults for the root layout. Pages add their own via `pageMetadata`. */
 const rootMetadata: Metadata = {
@@ -14,7 +30,7 @@ const rootMetadata: Metadata = {
   description: siteDescription,
   applicationName: siteName,
   openGraph: { ...openGraphDefaults, title: defaultTitle, description: siteDescription },
-  twitter: { card: "summary", title: defaultTitle, description: siteDescription },
+  twitter: { ...twitterDefaults, title: defaultTitle, description: siteDescription },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -48,7 +64,7 @@ function pageMetadata({
     description,
     alternates: { canonical: path },
     openGraph: { ...openGraphDefaults, title: fullTitle, description, url: path },
-    twitter: { card: "summary", title: fullTitle, description },
+    twitter: { ...twitterDefaults, title: fullTitle, description },
   };
 }
 

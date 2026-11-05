@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Callout } from "@/components/docs/callout";
 import { CodeBlock } from "@/components/docs/code-block";
@@ -11,6 +12,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { findPrimitive, primitives } from "@/lib/primitives";
 import { Grid } from "@/components/ui/grid";
 import { ProseList } from "@/components/docs/typography";
+import { guides } from "@/lib/guides";
 
 // Only the published primitives exist; any other slug is a static 404.
 export const dynamicParams = false;
@@ -28,8 +30,8 @@ export async function generateMetadata({
   const primitive = findPrimitive(slug);
   return primitive
     ? pageMetadata({
-        title: primitive.name,
-        description: primitive.description,
+        title: `React ${primitive.name} ${primitive.slug === "page" ? "Layout" : "Component"}`,
+        description: primitive.seoDescription,
         path: `/docs/layout/${primitive.slug}`,
       })
     : { title: "Not found" };
@@ -41,6 +43,7 @@ const toc = [
   { id: "render", title: "Element" },
   { id: "api", title: "Props" },
   { id: "notes", title: "Notes" },
+  { id: "compatibility", title: "Compatibility and next steps" },
 ];
 
 export default async function PrimitivePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -64,7 +67,7 @@ export default async function PrimitivePage({ params }: { params: Promise<{ slug
         id="usage"
         eyebrow="When to reach for it"
         title="Usage"
-        lede={`${primitive.name} is a thin wrapper over Tailwind utilities, so it costs nothing at runtime and composes with every other primitive.`}
+        lede={`${primitive.name} arranges React content with Tailwind utilities. Responsive behavior uses CSS media queries; Base UI handles element rendering without JavaScript viewport measurements.`}
       >
         <Grid gap={6} className="md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
           <ProseList>
@@ -113,6 +116,46 @@ export default async function PrimitivePage({ params }: { params: Promise<{ slug
           These components arrange your UI. They never style content, so cards, buttons, and forms
           keep coming from shadcn and your own design system.
         </Callout>
+      </Section>
+
+      <Section
+        id="compatibility"
+        eyebrow="Use it in your project"
+        title="Compatibility and next steps"
+      >
+        <ProseList>
+          <li>
+            Targets React 19, TypeScript, and Tailwind CSS 4. The shadcn CLI copies the source and
+            installs @base-ui/react; no Layout Kit npm package is needed.
+          </li>
+          <li>
+            The primitive provides layout, not routing, data fetching, or accessible behavior for
+            interactive widgets. Choose appropriate elements and labels for your content.
+          </li>
+          <li>
+            min-w-0 allows shrinking. Add explicit text wrapping or a scrolling region when content
+            can still overflow.
+          </li>
+          <li>
+            Use className for a one-off override, or direct Tailwind utilities when the supported
+            prop values do not fit your design.
+          </li>
+          <li>
+            <Link href="/docs/installation" className="underline underline-offset-4">
+              Install from the shadcn registry
+            </Link>{" "}
+            and review updates before accepting changes to your local source.
+          </li>
+          {guides
+            .filter((guide) => (guide.primitives as readonly string[]).includes(primitive.slug))
+            .map((guide) => (
+              <li key={guide.slug}>
+                <Link href={`/docs/guides/${guide.slug}`} className="underline underline-offset-4">
+                  {guide.title}: a complete example
+                </Link>
+              </li>
+            ))}
+        </ProseList>
       </Section>
 
       <DocPagination href={`/docs/layout/${primitive.slug}`} />

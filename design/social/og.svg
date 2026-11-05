@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fafaf7"/>
+  <g stroke="#dedfd5" stroke-width="1">
+    <path d="M64 64H1136M64 566H1136M64 64V566M1136 64V566"/>
+    <path d="M800 64V566M64 130H1136"/>
+  </g>
+  <g font-family="sans-serif" fill="#23251e">
+    <text x="96" y="106" font-size="22" letter-spacing="3">LAYOUT KIT</text>
+    <text x="96" y="237" font-size="64" font-weight="700">React layouts.</text>
+    <text x="96" y="313" font-size="64" font-weight="700">Your source code.</text>
+    <text x="96" y="388" font-size="25" fill="#5f6451">Typed primitives for shadcn/ui + Tailwind CSS</text>
+    <text x="96" y="528" font-size="21">layout.csikie.com</text>
+  </g>
+  <g fill="#edf0e4" stroke="#737b58" stroke-width="2">
+    <rect x="840" y="174" width="256" height="312" rx="16"/>
+    <rect x="860" y="194" width="216" height="46" rx="6" fill="#b7ee43"/>
+    <rect x="860" y="260" width="62" height="206" rx="6"/>
+    <rect x="942" y="260" width="134" height="92" rx="6"/>
+    <rect x="942" y="372" width="134" height="94" rx="6"/>
+  </g>
+</svg>

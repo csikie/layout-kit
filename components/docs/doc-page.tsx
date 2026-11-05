@@ -8,6 +8,8 @@ import { Stack } from "@/components/ui/stack";
 import { adjacentPages } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { Eyebrow, Lede, enterAnimation } from "./typography";
+import { StructuredData } from "./structured-data";
+import { breadcrumbData } from "@/lib/structured-data";
 
 export interface TocEntry {
   id: string;
@@ -158,6 +160,7 @@ export function DocPagination({ href }: { href: string }) {
   const { previous, next } = adjacentPages(href);
   return (
     <nav aria-label="Previous and next pages" className="mt-16">
+      <StructuredData data={breadcrumbData(href)} />
       <Grid cols={2} gap={{ base: 3, sm: 4 }}>
         {previous && (
           <Stack render={<Link href={previous.href} />} gap={1} className={pageLinkClassName}>

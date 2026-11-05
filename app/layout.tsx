@@ -5,6 +5,8 @@ import { Main } from "@/components/shell/main";
 import { Providers } from "@/components/shell/providers";
 import { SkipLink } from "@/components/shell/skip-link";
 import { rootMetadata } from "@/lib/metadata";
+import { StructuredData } from "@/components/docs/structured-data";
+import { websiteData } from "@/lib/structured-data";
 import "./globals.css";
 
 export const metadata: Metadata = rootMetadata;
@@ -17,6 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className="scroll-pt-24 scroll-smooth motion-reduce:scroll-auto"
     >
       <body className="selection:bg-primary selection:text-primary-foreground [-webkit-tap-highlight-color:transparent]">
+        <StructuredData data={websiteData} />
         <Providers>
           <SkipLink />
           <AppSidebar />

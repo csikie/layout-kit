@@ -15,6 +15,8 @@ export interface Primitive {
   category: "Flex" | "Grid" | "Page";
   tagline: string;
   description: string;
+  /** Concise search summary, separate from the longer visible introduction. */
+  seoDescription: string;
   renders: string;
   /** Primitives shown in the import snippet on the primitive's page. */
   usageImports: LayoutExport[];
@@ -40,6 +42,8 @@ const responsiveNote =
 export const primitives: Primitive[] = [
   {
     slug: "stack",
+    seoDescription:
+      "Arrange React components vertically with Stack. Use typed responsive gaps, alignment, and semantic elements with Tailwind CSS and shadcn/ui.",
     name: "Stack",
     category: "Flex",
     tagline: "Vertical rhythm",
@@ -82,6 +86,8 @@ export const primitives: Primitive[] = [
   },
   {
     slug: "row",
+    seoDescription:
+      "Arrange React components horizontally with Row. Explore wrapping, responsive gaps, alignment, and toolbar examples with Tailwind CSS.",
     name: "Row",
     category: "Flex",
     tagline: "Horizontal flow",
@@ -125,6 +131,8 @@ export const primitives: Primitive[] = [
   },
   {
     slug: "col",
+    seoDescription:
+      "Control flexible regions in React with Col. Learn grow, shrink, and self-alignment, and compose it with Stack and Row for responsive layouts.",
     name: "Col",
     category: "Flex",
     tagline: "Flexible regions",
@@ -167,6 +175,8 @@ export const primitives: Primitive[] = [
   },
   {
     slug: "grid",
+    seoDescription:
+      "Build responsive React grids with typed column counts, gaps, and alignment. Explore Tailwind CSS examples and the Layout Kit Grid API.",
     name: "Grid",
     category: "Grid",
     tagline: "Responsive structure",
@@ -208,6 +218,8 @@ export const primitives: Primitive[] = [
   },
   {
     slug: "grid-item",
+    seoDescription:
+      "Set responsive column spans in a React Grid with GridItem. Build dashboard regions with typed breakpoints, full-width items, and Tailwind CSS.",
     name: "GridItem",
     category: "Grid",
     tagline: "Column spans",
@@ -237,6 +249,8 @@ export const primitives: Primitive[] = [
   },
   {
     slug: "page",
+    seoDescription:
+      "Build React page layouts with a title, actions, and an optional responsive sidebar. Explore Page composition, heading levels, and content-first reading order.",
     name: "Page",
     category: "Page",
     tagline: "The complete frame",

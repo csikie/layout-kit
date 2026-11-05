@@ -81,6 +81,7 @@ export function PrimitiveCards() {
     >
       {primitives.map((item, index) => (
         <Link
+          prefetch={false}
           className="block min-w-0 transition-transform duration-250 hover:-translate-y-1 focus-visible:rounded-(--radius) focus-visible:outline-2 focus-visible:outline-offset-5 focus-visible:outline-ring"
           href={`/docs/layout/${item.slug}`}
           key={item.slug}

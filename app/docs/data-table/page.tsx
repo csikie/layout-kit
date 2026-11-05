@@ -11,8 +11,9 @@ import { Stack } from "@/components/ui/stack";
 import { ProseList } from "@/components/docs/typography";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Data Table",
-  description: "Client and server data tables with one shared surface.",
+  title: "React Data Table with TanStack Table",
+  description:
+    "Build React data tables with TanStack Table, sorting, filtering, pagination, and row selection. Explore client and server-controlled examples.",
   path: "/docs/data-table",
 });
 

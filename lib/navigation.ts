@@ -1,3 +1,5 @@
+import { guides } from "./guides";
+
 export interface NavItem {
   title: string;
   href: string;
@@ -46,6 +48,14 @@ export const navigation: NavGroup[] = [
         description: "Full screens built from the primitives.",
       },
     ],
+  },
+  {
+    label: "Guides",
+    items: guides.map((guide) => ({
+      title: guide.title,
+      href: `/docs/guides/${guide.slug}`,
+      description: guide.description,
+    })),
   },
   {
     label: "Shared UI",

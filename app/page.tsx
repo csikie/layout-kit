@@ -19,6 +19,8 @@ import { cn } from "@/lib/utils";
 import { layoutImports, uiImport } from "@/lib/examples/imports";
 import { pageMetadata } from "@/lib/metadata";
 import { Grid } from "@/components/ui/grid";
+import { ProseList } from "@/components/docs/typography";
+import { author, repositoryUrl } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({ path: "/" });
 
@@ -112,9 +114,9 @@ export default function HomePage() {
               <em className="font-serif font-normal italic">Less guesswork.</em>
             </h1>
             <p className="mt-6 max-w-120 text-[0.96rem] leading-[1.8] text-muted-foreground">
-              Six typed primitives for the space between your components. Stack, Row, Col, Grid,
-              GridItem, and Page give every screen the same vocabulary, from the first toolbar to
-              the whole page frame.
+              Typed React layout primitives for shadcn/ui and Tailwind CSS. Build responsive screens
+              with Stack, Row, Col, Grid, GridItem, and Page. Install from the shadcn registry and
+              own the TypeScript source in your project.
             </p>
             <HeroActions />
           </div>
@@ -139,7 +141,7 @@ export default function HomePage() {
           <FeatureCard
             eyebrow="Typed"
             title="A constrained scale"
-            description="Gap accepts 0 to 12 on the Tailwind scale, columns accept 1 to 12. Invalid values fail at compile time, not in review."
+            description="Gap uses eight Tailwind spacing values from 0 to 12; columns use 1 to 6 or 12. TypeScript checks your choices before they reach the screen."
           />
           <FeatureCard
             eyebrow="Responsive"
@@ -147,9 +149,9 @@ export default function HomePage() {
             description="gap, align, justify, cols, and span all take { base, sm, md, lg, xl, 2xl } maps. Every generated class is written out, so Tailwind always ships it."
           />
           <FeatureCard
-            eyebrow="Zero runtime"
+            eyebrow="CSS layouts"
             title="Just class names"
-            description="Each primitive renders one element with the right utilities. No context, no measurements, no layout shift."
+            description="Responsive layouts use Tailwind utilities and CSS media queries. Base UI handles element rendering; no JavaScript viewport measurements are needed."
           />
         </Grid>
       </Section>
@@ -188,6 +190,56 @@ export default function HomePage() {
         >
           <DashboardPatternDemo />
         </Preview>
+      </Section>
+
+      <Section id="fit" eyebrow="Choose your tools" title="When Layout Kit fits">
+        <Grid cols={{ base: 1, md: 2 }} gap={6}>
+          <div>
+            <h3 className="mb-3 text-lg font-medium">
+              A shared vocabulary for application screens
+            </h3>
+            <ProseList>
+              <li>
+                Use it for dashboards, forms, settings, and detail pages with recurring spacing.
+              </li>
+              <li>Keep shadcn/ui for buttons, cards, and inputs; use the kit to arrange them.</li>
+              <li>Choose typed responsive props when a team needs consistent layout decisions.</li>
+            </ProseList>
+          </div>
+          <div>
+            <h3 className="mb-3 text-lg font-medium">Keep direct Tailwind when it is simpler</h3>
+            <ProseList>
+              <li>One-off layouts can stay as utility classes without an additional component.</li>
+              <li>The kit does not provide a router, data fetching, or a full design system.</li>
+              <li>Its source targets React 19 and Tailwind CSS 4, and depends on Base UI.</li>
+            </ProseList>
+          </div>
+        </Grid>
+      </Section>
+
+      <Section id="guides" eyebrow="Build something real" title="From a task to a working layout">
+        <Stack gap={2} align="start">
+          <SectionLink href="/docs/guides/responsive-dashboard">
+            Build a responsive React dashboard
+          </SectionLink>
+          <SectionLink href="/docs/guides/stack-row-spacing">
+            Manage spacing with Stack and Row
+          </SectionLink>
+          <SectionLink href="/docs/guides/page-layout">
+            Compose a page with actions and a sidebar
+          </SectionLink>
+        </Stack>
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+          Open source under the MIT license, maintained by{" "}
+          <a href={author.url} className="underline underline-offset-4">
+            {author.name}
+          </a>
+          .{" "}
+          <a href={repositoryUrl} className="underline underline-offset-4">
+            Read the source, releases, and issues on GitHub
+          </a>
+          .
+        </p>
       </Section>
     </>
   );

@@ -10,8 +10,9 @@ import { layoutImports, uiImport } from "@/lib/examples/imports";
 import { ProseList } from "@/components/docs/typography";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Installation",
-  description: "Install the layout primitives from the shadcn registry.",
+  title: "Install with the shadcn CLI",
+  description:
+    "Install Layout Kit in a React 19 and Tailwind CSS 4 project. Configure the shadcn registry, add typed layout components, and customize your source.",
   path: "/docs/installation",
 });
 
@@ -117,11 +118,17 @@ export default function InstallationPage() {
           <li>
             Tailwind CSS 4. The primitives are plain utility classes and need no plugin or preset.
           </li>
-          <li>React 19.3 or compatible. The primitives use the React 19 ref-as-prop model.</li>
+          <li>React 19 and TypeScript. The primitives use the React 19 ref-as-prop model.</li>
+          <li>The CLI installs @base-ui/react, used by the primitives for element rendering.</li>
+          <li>
+            No specific router is required. Examples use the default @/components/ui alias; your
+            shadcn configuration controls the installed paths.
+          </li>
         </ProseList>
         <Callout className="mt-6" title="Your code, not a dependency">
-          The registry copies source files into your project. Update by running the add command
-          again, and edit the files freely when your product needs something different.
+          The registry copies MIT-licensed source files into your project. There is no Layout Kit
+          npm package. Edit the files freely; review the CLI diff before accepting updates so local
+          customizations are preserved.
         </Callout>
       </Section>
       <DocPagination href="/docs/installation" />

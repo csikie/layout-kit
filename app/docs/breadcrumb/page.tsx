@@ -14,8 +14,9 @@ import { Stack } from "@/components/ui/stack";
 import { Lede } from "@/components/docs/typography";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Breadcrumb",
-  description: "Route-aware breadcrumb trails with dynamic labels and responsive overflow.",
+  title: "React Breadcrumb with Route-Aware Labels",
+  description:
+    "Create accessible React breadcrumb navigation with dynamic route labels, responsive overflow, and an optional context provider. Explore live examples.",
   path: "/docs/breadcrumb",
 });
 

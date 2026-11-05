@@ -1,9 +1,14 @@
 # Layout Kit
 
-Six typed React layout primitives for the space between your components:
+Typed React layout primitives for **shadcn/ui and Tailwind CSS 4**:
 **Stack, Row, Col, Grid, GridItem, and Page**. They ship as a
 [shadcn registry](https://ui.shadcn.com/docs/registry), so the CLI copies the
 source into your project and you own the code.
+
+Use Layout Kit for consistent spacing, responsive grids, and page frames in
+dashboards, forms, settings, and detail screens. It arranges your existing UI;
+buttons, inputs, routing, and data fetching stay with your application.
+For a one-off layout, direct Tailwind utilities may be all you need.
 
 **Documentation and live examples: [layout.csikie.com](https://layout.csikie.com)**
 
@@ -55,6 +60,21 @@ Tailwind CSS 4, and React 19.
 
 Files land in `components/ui/` and `lib/spacing.ts`, with imports rewritten to
 your aliases. The primitives depend on `@base-ui/react`, which the CLI installs.
+There is no Layout Kit npm package. Responsive behavior uses CSS media queries,
+without JavaScript viewport measurements; React and Base UI still perform rendering.
+Review the CLI diff before accepting updates to customized files.
+
+## Guides and examples
+
+- [Build a responsive React dashboard](https://layout.csikie.com/docs/guides/responsive-dashboard)
+- [Manage spacing with Stack and Row](https://layout.csikie.com/docs/guides/stack-row-spacing)
+- [Build a page with actions and a sidebar](https://layout.csikie.com/docs/guides/page-layout)
+- [Component reference](https://layout.csikie.com/docs/layout/stack)
+- [Documentation index for tools](https://layout.csikie.com/llms.txt)
+
+Each guide includes prerequisites, a live example, its complete source, and
+verification advice. No specific router is required. Examples use the default
+shadcn import aliases; the CLI adapts paths to your project.
 
 ## The primitives
 
@@ -96,6 +116,7 @@ Shared value sets, from `lib/spacing.ts`:
 ## Contributing
 
 Issues and pull requests are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+Maintained by [Erik Csiki-Gecse](https://github.com/csikie).
 
 ## License
 

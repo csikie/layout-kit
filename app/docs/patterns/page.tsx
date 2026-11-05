@@ -11,8 +11,9 @@ import {
 import { dashboardPattern, detailPattern, settingsPattern } from "@/lib/examples/patterns";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Patterns",
-  description: "Full screens composed from the layout primitives and shadcn components.",
+  title: "React Layout Patterns with shadcn/ui",
+  description:
+    "Explore responsive dashboard, settings, and detail-page layouts built with React, Tailwind CSS, shadcn/ui, and Layout Kit primitives.",
   path: "/docs/patterns",
 });
 
@@ -37,7 +38,7 @@ const patterns = [
     id: "detail",
     eyebrow: "Pattern 03",
     title: "Record detail with summary rail",
-    lede: "Page.Body places the summary aside first on large screens and stacks it above the tabs on small ones. The content column never fights the rail for width.",
+    lede: "Page.Body places the summary aside on the left on large screens and stacks it after the content on small ones. Reading order stays content-first at every size.",
     source: detailPattern,
     Demo: DetailPatternDemo,
   },
